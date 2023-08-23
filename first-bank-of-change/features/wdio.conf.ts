@@ -6,19 +6,19 @@ const browserLogs = require('../tools/testing/browser-logs');
 
 import dataManager from './data/data-manager';
 
-// Toggles logging browser error logs into the Cucumber HTML report. 
+// Toggles logging browser error logs into the Cucumber HTML report.
 // Defaults to logging errors.
 const enforceConsoleLogErrors = process.env.ENFORCE_CONSOLE_LOG_ERRORS || 'true';
 
-// Allows for filtering of logs by logging level.  See 
-// ./tools/testing/browser-logs for details.   
+// Allows for filtering of logs by logging level.  See
+// ./tools/testing/browser-logs for details.
 // Based on: https://github.com/wix/protractor-browser-logs#readme
 let browserLogsInstance: any;
 
 /*
-  There are several log level values available, but SEVERE is the only valid 
+  There are several log level values available, but SEVERE is the only valid
   value.  This is due to the configuration in the beforeScenario() below.
-  It only allows SEVERE when enforceConsoleLogErrors === 'true'.  This helps 
+  It only allows SEVERE when enforceConsoleLogErrors === 'true'.  This helps
   keep log noise down.
   https://www.selenium.dev/selenium/docs/api/javascript/module/selenium-webdriver/lib/logging_exports_Level.html
 */
@@ -26,9 +26,9 @@ const consoleLoggingLevels = ['SEVERE', 'INFO', 'WARNING'];
 
 /**
  * This takes browser logs and appends them to the Cucumber JSON file.
- * The logs appear in the Cucumber HTML report under the After section.  
+ * The logs appear in the Cucumber HTML report under the After section.
  * This allows for easy troubleshoting of any failed test scenarios.
- * 
+ *
  * Based on: https://stackoverflow.com/questions/55640562/catch-console-errors-while-running-e2e-tests-with-jasmine-and-protractor
  *
  * @param suppressErrors {boolean} Allows for error to be logged or not
@@ -61,6 +61,9 @@ exports.config = {
     // WebdriverIO allows it to run your tests in arbitrary locations (e.g. locally or
     // on a remote machine).
     runner: 'local',
+    hostname: 'selenium',
+    port: 4444,
+    path: '/',
     //
     // ==================
     // Specify Test Files
@@ -114,21 +117,23 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [{
-
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 5,
+        maxInstances: 1,
         //
         browserName: 'chrome',
+        // browserVersion: 'stable',
+        // browserVersion: '84.0',
+        // browserVersion: '91.0',
         acceptInsecureCerts: true,
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
         // excludeDriverLogs: ['bugreport', 'server'],
-        // Override the default browser logging to get more info in the 
+        // Override the default browser logging to get more info in the
         // Cucumber HTML report.
-        "goog:loggingPrefs": { "driver": "WARNING", "browser": "INFO" }
+        // "goog:loggingPrefs": { "driver": "DEBUG", "browser": "DEBUG" }
     }],
     //
     // ===================
@@ -168,7 +173,8 @@ exports.config = {
     //
     // Default timeout in milliseconds for request
     // if browser driver or grid doesn't send response
-    connectionRetryTimeout: 120000,
+    // connectionRetryTimeout: 120000,
+    connectionRetryTimeout: 15000,
     //
     // Default request retries count
     connectionRetryCount: 3,
@@ -177,7 +183,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone'],
+    // services: ['selenium-standalone'],
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -293,7 +299,7 @@ exports.config = {
      * Runs before a Cucumber scenario
      */
     beforeScenario: function (_world: any) {
-        // Set up logging of browser logs 
+        // Set up logging of browser logs
         const logs = browserLogs(browser);
         // TODO make client logs capture more configurable
         // if (enforceConsoleLogErrors && enforceConsoleLogErrors.toLowerCase() === 'true') {
@@ -302,7 +308,7 @@ exports.config = {
         //     logs.ignore(logs.or(logs.or(logs.or(logs.WARNING, logs.INFO), logs.DEBUG), logs.ERROR));
         // }
         browserLogsInstance = logs;
-        // log any errors from the browser opening, which are not related to 
+        // log any errors from the browser opening, which are not related to
         // the test.  Helps with troubleshooting.
         logConsoleOutput(false);
         logs.reset();
@@ -319,7 +325,7 @@ exports.config = {
      */
     afterStep: function (_step: any, _context: any, status: any) {
         // Take screenshot on failed senarios for troubleshooting
-        if (status && status.passed === false) { 
+        if (status && status.passed === false) {
             cucumberJson.attach(browser.takeScreenshot(), 'image/png');
         }
     },

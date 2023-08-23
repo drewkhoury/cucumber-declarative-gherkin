@@ -3,11 +3,13 @@ const config = require('./wdio.conf.ts').config;
 
 config.capabilities[0]['goog:chromeOptions'] = {
     args: [
-        'headless',
+        '--no-sandbox', // this arg *may* need to be first in the list
+        '--headless',
         // Use --disable-gpu to avoid an error from a missing Mesa
         // library, as per
         // https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
-        'disable-gpu',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
     ],
 }
 
