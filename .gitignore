@@ -33,9 +33,14 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.cache
+.npm
+.config
+.local
 
 # System Files
 .DS_Store
 Thumbs.db
+.ash_history
 
 .vscode

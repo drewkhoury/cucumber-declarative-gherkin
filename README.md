@@ -34,39 +34,34 @@ folder.
 
 Want to run the declarative Gherkin:
 
-1. Install the perquisites
-1. Run `nvm use` in the root folder
-1. run `npm install` in the `first-bank-of-change` folder
-1. run `npm run e2e`
-1. Then open the file
-    `cucumber-declarative-gherkin/first-bank-of-change/.tmp/report/index.html` in a browser
+1. `cd first-bank-of-change`
+2. `make npm install`
+3. `docker compose up selenium` (**`NOTE`** does not return to shell)
+4. Open browser to http://localhost:7900/?autoconnect=1&resize=scale&password=secret
+5. (in a new shell in _first-bank-of-change_) `make npm run e2e`
 
-**NOTE:** The e2e test will fail.  It is to demo the advance logging.  
-navigate to the failing scenario to see a screenshot, test suite failure
-location and client logging entries.
+You should see the tests run against the browser in the VNC viewer browser window.
 
-## Perquisites
+The run should fail due to one failing test, but otherwise all tests should execute.
 
-- Need Node and NPM, built with node 14.16.0
-- NX needs to be installed globally
-  - `npm i -g nx`
+Open the file `cucumber-declarative-gherkin/first-bank-of-change/.tmp/report/index.html` in a browser to see the report.
 
 ## Run the Example App
 
 This demo uses a single app with everything running in memory.  No servers are
 used for this demo.
 
-From the repo root folder run `npm run start`, then go to `http:\\localhost:4200`.
+From the _first-bank-of-change_ folder run `make npm run start`, then go to `http:\\localhost:4200`.
 
 ## Local Development
 
-When developing locally, you can run `npm run start` it will watch your file
+When developing locally, you can run `make npm run start` it will watch your file
 changes and reload.  In addition, when working on e2e tests, run
-`npm run e2e-dev`, it only runs the test suite.
+`make npm run e2e-dev`, it only runs the test suite.
 
-To run lint, use `npm run lint`
+To run lint, use `make npm run lint`
 
-To run unit tests, use `npm run test`
+To run unit tests, use `make npm run test`
 
 ### Generate Cucumber Step Definitions
 

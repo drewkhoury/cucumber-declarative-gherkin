@@ -1,4 +1,4 @@
-Feature: New Credit Form Applciation
+Feature: New Credit Form Application
 
     # In this scenario, Tom Smith has a back-end ratio of 36%, which is the
     # highest acceptable value stated in the organization/industry terms wiki.
@@ -20,8 +20,8 @@ Feature: New Credit Form Applciation
         When they submit their form
         Then they see a "failing" submittal response
 
-    # This is a broken scenario to demostrate the logging and screenshot 
-    # logging abilities.  To see the logs, open the file below and naviagte 
+    # This is a broken scenario to demostrate the logging and screenshot
+    # logging abilities.  To see the logs, open the file below and naviagte
     # the failure using the red badges as your guide.
     # "cucumber-declarative-gherkin/first-bank-of-change/.tmp/report/index.html"
     @brokenScenario
@@ -45,7 +45,7 @@ Feature: New Credit Form Applciation
         When they submit their form
         Then they see a "failing" submittal response
 
-    # Good eaxmple of testing system errors.  This may require running the 
+    # Good eaxmple of testing system errors.  This may require running the
     # system under test supported by mocks.  Thus, it is easy to inject
     # This type of failure.
     Scenario: Error due to form processing unavilable
@@ -53,4 +53,4 @@ Feature: New Credit Form Applciation
         And "Kelly Baddy" fills out the form with their information
         When they submit their form
         Then they see a "error" submittal response
-    
+
